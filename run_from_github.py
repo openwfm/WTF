@@ -39,7 +39,7 @@ def main():
  branch=None
 
  # Keep track of version number for Data directory
- version="v04.01"
+ version="v04.08"
 
  # First things first: check if user has a "Data" directory, quit with helpful message if they don't
  if not os.path.isdir("Data"):

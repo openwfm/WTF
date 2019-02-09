@@ -71,7 +71,7 @@ export CONFIGURE_MPI="28"
 # WRF tests are performed consecutively on the local machine.
 # Recommended values:  both false for personal computers, both true for mainframe computers with batch queues. 
 
-export BATCH_COMPILE=true
+export BATCH_COMPILE=false
 export BATCH_TEST=true
 
 # Can be set to "LSF", "PBS", or "NQS".  Right now, "NQS" has been tested on janus.colorado.edu only.  
@@ -91,7 +91,7 @@ export TEST_QUEUE=share
 
 # Account charge code string for queue-managed computers. Ignored when BATCH_COMPILE and BATCH_TEST are false.
 
-export BATCH_ACCOUNT=NMMM0054
+export BATCH_ACCOUNT=UCUD0004
 
 # Number of processors/tasks to use for building WRF. 
 # No reason to set larger than 6 due to diminishing returns on compile time.
