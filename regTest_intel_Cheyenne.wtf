@@ -27,7 +27,7 @@ if $CHECK_MODULES; then
    $WRF_TEST_ROOT/scripts/checkModules ${COMPILER_WTF}
    if [ $? != 0 ]; then
       echo "WTF: ${COMPILER_WTF} compiler not loaded; aborting."
-      exit 255
+      #exit 255
    fi
 fi   
 

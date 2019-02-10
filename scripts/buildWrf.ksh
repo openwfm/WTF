@@ -471,18 +471,8 @@ fi
 
 OS_NAME=`uname`
 
-if [ "$OS_NAME" -eq "Darwin" ]; then
-   TMPDIR=/Volumes/sysdisk1/$thisUser/tmp
-   mkdir $TMPDIR
-   TMPDIR=$TMPDIR/$BUILD_STRING
-   mkdir $TMPDIR
-elif [ "$OS_NAME" -eq "Linux" -a -d /glade ]; then
-   TMPDIR=/gpfs/fs1/scratch/$thisUser/tmp/$BUILD_STRING
-   mkdir -p $TMPDIR
-else
-   TMPDIR=/tmp/$BUILD_STRING
-   mkdir -p $TMPDIR
-fi
+TMPDIR=/gpfs/fs1/scratch/$thisUser/tmp/$BUILD_STRING
+mkdir -p $TMPDIR
 export TMPDIR
 
 # Run 'compile'; see existing regression scripts.    
