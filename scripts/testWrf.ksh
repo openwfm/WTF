@@ -543,12 +543,18 @@ if $BATCH_TEST; then
                openmp) if [ -z "$runMem" ]; then
                           (( totalMem = NUM_PROC * BATCH_MEM ))
                           runMem=$totalMem
+			  if [ "$runMem" -ge 90 ]; then
+			  	runMem=90
+			  fi  
                        fi
                        BSUB="qsub -q $BATCH_QUEUE -A $BATCH_ACCOUNT -l select=1:ncpus=$NUM_PROC:ompthreads=$NUM_PROC:mem=${runMem}GB -l walltime=$runTime -N $jobString -o test.out -e test.err"
                        ;;
                mpi)    if [ -z "$runMem" ]; then
                           (( totalMem = NUM_PROC * BATCH_MEM ))
                           runMem=$totalMem
+			  if [ "$runMem" -ge 90 ]; then
+                                runMem=90
+                          fi 
                        fi
                        BSUB="qsub -q $BATCH_QUEUE -A $BATCH_ACCOUNT -l select=1:ncpus=$NUM_PROC:mpiprocs=$NUM_PROC:mem=${runMem}GB -l walltime=$runTime -N $jobString -o test.out -e test.err"
                        ;;

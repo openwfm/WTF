@@ -42,7 +42,7 @@ if ( ! -e Data/v04.08  ) then
    exit 2
 endif
 
-setenv TMPDIR /gpfs/fs1/scratch/$USER/tmp # CISL-recommended hack for Cheyenne builds
+setenv TMPDIR /gpfs/fs1/scratch/$USER/TMP # CISL-recommended hack for Cheyenne builds
 
 scripts/run_all_for_qsub1.csh
 scripts/run_all_for_qsub2.csh

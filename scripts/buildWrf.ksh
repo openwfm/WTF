@@ -471,7 +471,7 @@ fi
 
 OS_NAME=`uname`
 
-TMPDIR=/gpfs/fs1/scratch/$thisUser/tmp/$BUILD_STRING
+TMPDIR=/gpfs/fs1/scratch/$thisUser/TMP/$BUILD_STRING
 mkdir -p $TMPDIR
 export TMPDIR
 
@@ -484,7 +484,7 @@ if $RUN_COMPILE; then
           LSF)  BSUB="bsub -K -q $BUILD_QUEUE -P $BATCH_ACCOUNT -n $NUM_PROCS -a poe -W $wallTime -J $BUILD_STRING -o build.out -e build.err"
                 ;;
           PBS)  BSUB="qsub -Wblock=true -q $BUILD_QUEUE -A $BATCH_ACCOUNT -l select=1:ncpus=$NUM_PROCS:mem=${MEM_BUILD}GB -l walltime=${wallTime} -N $BUILD_STRING -o build.out -e build.err"
-                TMPDIR=/gpfs/fs1/scratch/$thisUser/tmp/$BUILD_STRING
+                TMPDIR=/gpfs/fs1/scratch/$thisUser/TMP/$BUILD_STRING
                 cat > build.sh << EOF
           export TMPDIR="$TMPDIR"     # CISL-recommended hack for Cheyenne builds
           export MPI_DSM_DISTRIBUTE=0 # CISL-recommended hack for distributing jobs properly in share queue
