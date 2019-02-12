@@ -510,6 +510,7 @@ EOF
     fi
 fi  # if $CREATE_DIR
 
+maxMem=100
 
 # To allow many tests to be done in parallel, put all tests (even serial jobs) in a processing queue.  
 if $BATCH_TEST; then
@@ -523,10 +524,11 @@ if $BATCH_TEST; then
             fi
             BSUB="bsub -q $BATCH_QUEUE -P $BATCH_ACCOUNT -n $NUM_PROC -a poe -W $runTime -J $jobString -o test.out -e test.err -cwd $testDir "
             echo $BSUB > $testDir/submitCommand
-            $BSUB < $testDir/test.sh
-            ;;
+            $BSUB $testDir/test.sh
+	    ;;
         PBS) # Create a meaningful job string, so unfinished jobs can be identified easily. 
-            origDir=`pwd`
+	    origDir=`pwd`
+	    echo origDir=$origDir
             jobString=`getJobString $WRF_TYPE $PARALLEL_TYPE $NAMELIST_PATH`
             # Look for time control spec at end of namelist
             runTime=`grep PBS_TIME $testDir/namelist.input | cut -d '=' -f 2`
@@ -534,34 +536,41 @@ if $BATCH_TEST; then
                runTime="0:05:00"
             fi
             runMem=`grep MEMORY_REQ $testDir/namelist.input | cut -d '=' -f 2`
+	    echo $PARALLEL_TYPE
             case $PARALLEL_TYPE in
-               serial) if [ -z "$runMem" ]; then
+	       serial) 
+		       if [ -z "$runMem" ]; then
                           runMem=$BATCH_MEM
                        fi
                        BSUB="qsub -q $BATCH_QUEUE -A $BATCH_ACCOUNT -l select=1:ncpus=1:mem=${runMem}GB -l walltime=$runTime -N $jobString -o test.out -e test.err"
                        ;;
-               openmp) if [ -z "$runMem" ]; then
+	       openmp) 
+                       if [ -z "$runMem" ]; then
                           (( totalMem = NUM_PROC * BATCH_MEM ))
                           runMem=$totalMem
-			  if [ "$runMem" -ge 90 ]; then
-			  	runMem=90
-			  fi  
+		          if [ $runMem -gt $maxMem ]; then
+				runMem=$maxMem
+			  fi
                        fi
                        BSUB="qsub -q $BATCH_QUEUE -A $BATCH_ACCOUNT -l select=1:ncpus=$NUM_PROC:ompthreads=$NUM_PROC:mem=${runMem}GB -l walltime=$runTime -N $jobString -o test.out -e test.err"
-                       ;;
-               mpi)    if [ -z "$runMem" ]; then
+		       ;;
+		mpi)    
+                       if [ -z "$runMem" ]; then
                           (( totalMem = NUM_PROC * BATCH_MEM ))
                           runMem=$totalMem
-			  if [ "$runMem" -ge 90 ]; then
-                                runMem=90
-                          fi 
+		          if [ $runMem -gt $maxMem ]; then
+                                runMem=$maxMem
+                          fi 	
                        fi
                        BSUB="qsub -q $BATCH_QUEUE -A $BATCH_ACCOUNT -l select=1:ncpus=$NUM_PROC:mpiprocs=$NUM_PROC:mem=${runMem}GB -l walltime=$runTime -N $jobString -o test.out -e test.err"
                        ;;
-            esac
+		*)     echo "Error: Unknown parallel type $PARALLEL_TYPE!"
+		       exit 2
+            	       ;;
+	    esac
             cd $testDir
             echo $BSUB > submitCommand
-            $BSUB test.sh
+            $BSUB < test.sh
             cd $origDir
             ;;
         NQS) # Create a meaningful job string, so unfinished jobs can be identified easily. 

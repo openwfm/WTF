@@ -65,7 +65,7 @@ sleep 10
 ################### PGI
 echo submit PGI WTF
 module swap intel pgi/${PGIversion}
-module load netcdf/4.4.1.1
+module load netcdf
 module list
 ( nohup scripts/run_WRF_Tests.ksh -R regTest_pgi_Cheyenne.wtf ) >&! foo_pgi &
 if ( $RUN_DA != NO ) then
