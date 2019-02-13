@@ -3,7 +3,7 @@
 set RUN_DA = NO
 #set RUN_DA = YEPPERS
 
-set PGIversion = 17.9
+set PGIversion = 16.5
 
 echo
 echo
@@ -35,7 +35,7 @@ echo
 ################### PGI
 echo submit PGI WTF
 module swap intel pgi/${PGIversion}
-module load netcdf/4.4.1.1
+module load netcdf
 module list
 ( nohup scripts/run_WRF_Tests.ksh -R regTest_pgi_Cheyenne.wtf ) >&! foo_pgi &
 if ( $RUN_DA != NO ) then

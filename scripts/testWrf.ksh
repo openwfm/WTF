@@ -200,7 +200,7 @@ if [ "$BATCH_COMPILE" = false -a "$BATCH_TEST" = false ]; then
 else
    NUM_PROC=`grep NUM_PROCESSORS ${NAMELIST_PATH} | cut -d '=' -f 2`
    if [ -z "$NUM_PROC" ]; then
-      if [[ $BATCH_QUEUE = "share" ]] || [[ $BATCH_QUEUE = "caldera" ]]; then
+      if [[ $BATCH_QUEUE = "share" ]] || [[ $BATCH_QUEUE = "regular" ]] || [[ $BATCH_QUEUE = "caldera" ]]; then
          NUM_PROC=$NUM_PROC_TEST
       else
          case $BATCH_QUEUE_TYPE in
@@ -471,7 +471,7 @@ fi
 if $CREATE_DIR; then
     if [ "$PARALLEL_TYPE" = "mpi" ]; then    
         ##  Put all batched commands related to running the test in the local file "test.sh". 
-        if [[ $BATCH_QUEUE = "share" ]] then
+        if [[ $BATCH_QUEUE = "share" ]] || [[ $BATCH_QUEUE = "regular" ]]; then
             cat >| $testDir/test.sh << EOF
         export MPI_USE_ARRAY=false
         export MPI_DSM_DISTRIBUTE=0 # CISL-recommended hack for distributing jobs properly in share queue
