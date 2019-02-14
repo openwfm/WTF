@@ -471,7 +471,7 @@ fi
 if $CREATE_DIR; then
     if [ "$PARALLEL_TYPE" = "mpi" ]; then    
         ##  Put all batched commands related to running the test in the local file "test.sh". 
-        if [[ $BATCH_QUEUE = "share" ]] || [[ $BATCH_QUEUE = "regular" ]]; then
+        if [[ $BATCH_QUEUE = "share" ]] then
             cat >| $testDir/test.sh << EOF
         export MPI_USE_ARRAY=false
         export MPI_DSM_DISTRIBUTE=0 # CISL-recommended hack for distributing jobs properly in share queue
