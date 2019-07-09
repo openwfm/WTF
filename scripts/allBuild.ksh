@@ -90,7 +90,7 @@ done
 # Special case to speed up 4DVAR build: wait for WRFPLUS specifically, then move on
 if $WRFDA_4DVAR; then
    for platform in $CONFIGURE_CHOICES; do
-      batchWait $BATCH_QUEUE_TYPE "bld\.wp\.$platform" 60
+      batchWait $BATCH_QUEUE_TYPE "bld\.wp\.$platform" 120
       buildDir=${BUILD_DIR}/$wrfTarName.$platform
       buildString=`getBuildString wrfda_4dvar $platform`
       if $BATCH_COMPILE; then
@@ -110,7 +110,7 @@ if $BATCH_COMPILE; then
    for wrfType in $WRF_PARALLEL; do
       for platform in $CONFIGURE_CHOICES; do
          code=`getTypeCode $wrfType`
-         batchWait $BATCH_QUEUE_TYPE "bld\.${code}\.${platform}" 60
+         batchWait $BATCH_QUEUE_TYPE "bld\.${code}\.${platform}" 120
       done
    done
 fi

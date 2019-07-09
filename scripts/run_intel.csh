@@ -3,6 +3,9 @@
 set RUN_DA = NO
 #set RUN_DA = YEPPERS
 
+set RUN_WRFFIRE = NO
+#set RUN_WRFFIRE = YEPPERS
+
 set INTELversion = 17.0.1
 
 echo
@@ -36,11 +39,15 @@ echo
 echo submit intel WTF
 module swap gnu intel/${INTELversion}
 module list
-( nohup scripts/run_WRF_Tests.ksh -R regTest_intel_Cheyenne.wtf ) >&! foo_intel &
-if ( $RUN_DA != NO ) then
-# WRFPLUS GIVES INTERNAL COMPILER ERROR, SKIP FOR NOW
-        echo submit intel WRFDA WTF
-        ( nohup scripts/run_WRF_Tests.ksh -R regTest_intel_Cheyenne_WRFDA.wtf ) >&! foo_intel_WRFDA &
+if ( $RUN_WRFFIRE != NO ) then
+( nohup scripts/run_WRF_Tests.ksh -R regTest_intel_Cheyenne_wrf-fire.wtf ) >&! foo_intel &
+else
+	( nohup scripts/run_WRF_Tests.ksh -R regTest_intel_Cheyenne.wtf ) >&! foo_intel &
+	if ( $RUN_DA != NO ) then
+		# WRFPLUS GIVES INTERNAL COMPILER ERROR, SKIP FOR NOW
+        	echo submit intel WRFDA WTF
+        	( nohup scripts/run_WRF_Tests.ksh -R regTest_intel_Cheyenne_WRFDA.wtf ) >&! foo_intel_WRFDA &
+	endif
 endif
 echo
 

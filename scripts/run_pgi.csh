@@ -3,6 +3,9 @@
 set RUN_DA = NO
 #set RUN_DA = YEPPERS
 
+set RUN_WRFFIRE = NO
+#set RUN_WRFFIRE = YEPPERS
+
 set PGIversion = 17.9
 
 echo
@@ -37,10 +40,14 @@ echo submit PGI WTF
 module swap intel pgi/${PGIversion}
 module load netcdf
 module list
-( nohup scripts/run_WRF_Tests.ksh -R regTest_pgi_Cheyenne.wtf ) >&! foo_pgi &
-if ( $RUN_DA != NO ) then
-        echo submit pgi WRFDA WTF
-        ( nohup scripts/run_WRF_Tests.ksh -R regTest_pgi_Cheyenne_WRFDA.wtf ) >&! foo_pgi_WRFDA &
+if ( $RUN_WRFFIRE != NO ) then
+	( nohup scripts/run_WRF_Tests.ksh -R regTest_pgi_Cheyenne_wrf-fire.wtf ) >&! foo_pgi &
+else
+	( nohup scripts/run_WRF_Tests.ksh -R regTest_pgi_Cheyenne.wtf ) >&! foo_pgi &
+	if ( $RUN_DA != NO ) then
+        	echo submit pgi WRFDA WTF
+        	( nohup scripts/run_WRF_Tests.ksh -R regTest_pgi_Cheyenne_WRFDA.wtf ) >&! foo_pgi_WRFDA &
+	endif
 endif
 
 wait

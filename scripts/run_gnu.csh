@@ -3,6 +3,9 @@
 set RUN_DA = NO
 #set RUN_DA = YEPPERS
 
+set RUN_WRFFIRE = NO
+#set RUN_WRFFIRE = YEPPERS
+
 set GNUversion = 6.3.0
 
 echo
@@ -35,10 +38,14 @@ echo
 ################### GNU
 echo submit gnu WTF
 
-( nohup scripts/run_WRF_Tests.ksh -R regTest_gnu_Cheyenne.wtf ) >&! foo_gnu &
-if ( $RUN_DA != NO ) then
-	echo submit gnu WRFDA WTF
-	( nohup scripts/run_WRF_Tests.ksh -R regTest_gnu_Cheyenne_WRFDA.wtf ) >&! foo_gnu_WRFDA &
+if ( $RUN_WRFFIRE != NO ) then
+	( nohup scripts/run_WRF_Tests.ksh -R regTest_gnu_Cheyenne_wrf-fire.wtf ) >&! foo_gnu &
+else
+	( nohup scripts/run_WRF_Tests.ksh -R regTest_gnu_Cheyenne.wtf ) >&! foo_gnu &
+	if ( $RUN_DA != NO ) then
+		echo submit gnu WRFDA WTF
+		( nohup scripts/run_WRF_Tests.ksh -R regTest_gnu_Cheyenne_WRFDA.wtf ) >&! foo_gnu_WRFDA &
+	endif
 endif
 
 wait
